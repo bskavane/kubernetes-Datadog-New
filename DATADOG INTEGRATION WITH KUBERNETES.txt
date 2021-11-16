@@ -1,0 +1,62 @@
+curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
+
+sudo apt-get install apt-transport-https --yes
+
+echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+
+sudo apt-get update
+
+apt-get install helm
+
+helm repo add datadog https://helm.datadoghq.com
+
+helm repo add stable https://charts.helm.sh/stable
+
+helm repo update
+
+vim values.yaml
+
+helm install kubernetes-monitoring -f values.yaml --set datadog.site='datadoghq.com' --set datadog.apiKey='dafb810cd3b7625f00daefddd8615f6c' datadog/datadog
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+AGENT INSTALLATION
+
+kubectl apply -f "https://raw.githubusercontent.com/DataDog/datadog-agent/master/Dockerfiles/manifests/rbac/clusterrole.yaml" 
+
+kubectl apply -f "https://raw.githubusercontent.com/DataDog/datadog-agent/master/Dockerfiles/manifests/rbac/serviceaccount.yaml" 
+
+kubectl apply -f "https://raw.githubusercontent.com/DataDog/datadog-agent/master/Dockerfiles/manifests/rbac/clusterrolebinding.yaml" 
+
+kubectl create secret generic datadog-agent --from-literal api-key="dafb810cd3b7625f00daefddd8615f6c" --namespace="default"
+
+
+
+
+apt get install git
+
+which git
+
+git clone https://github.com/kubernetes/kube-state-metrics.git
+
+cd kube-state-metrics/
+
+kubectl apply -f examples/standard
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Rough work 
+
+eksctl create cluster --name k8-3  \
+--region us-east-2 \
+--node-type t2.large \
+--nodes-min 2 \
+--nodes-max 4 \ 
+
+
+example:
+eksctl create cluster --name valaxy-cluster \
+   --region ap-south-1 \
+--node-type t2.small \
